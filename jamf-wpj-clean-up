@@ -8,7 +8,7 @@
 #NOTE: THIS SCRIPT WILL NOT CLEAR AZURE AD RECORDS (those are created by Company Portal). IT MAY CLEAR MEM RECORDS IF A JAMFAAD GATHER AAD INFO COMMAND RUNS AFTER THIS AS THE AAD ID IS NOW MISSING. THIS WILL RESULT IN A DEACTIVATION OF THE DEVICE RECORD SENT FROM JAMF PRO TO AAD (AND AAD TO MEM).
 #
 #variable to run as current user
-currentuser=`stat -f "%Su" /dev/console`
+loggedInUser=$(scutil <<< "show State:/Users/ConsoleUser" | awk '/Name :/  { print $3 }')
 #
 #variable for current logged in user AAD ID cert. and WPJ key 
 AAD_ID=$(su "$currentuser" -c "security find-certificate -a -Z | grep -B 9 "MS-ORGANIZATION-ACCESS" | awk '/\"alis\"<blob>=\"/ {print $NF}' | sed 's/  \"alis\"<blob>=\"//;s/.$//'")
